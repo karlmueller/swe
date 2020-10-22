@@ -17,23 +17,40 @@ def sshCommand(hostname, port=22, username = 'pi', password = 'karl', comm =''):
 
 	client.connect(hostname, port, username, password)
 
+	stdin, stdout, stderr = client.exec_command(comm)
+	print('command executed')
+
+	stdout_r = stdout.readlines()
+	for l in stdout_r:
+		print(l)
+
+'''
+	for l in line_buffered(stdout):
+		print(l)
+
+def line_buffered(f):
+	print("entered buffer sequence")
+	line_buf = ""
+	while True: #not f.channel.exit_status_ready():
+		line_buf += f.read(1)
+		print("completed line")
+		if line_buf.endswith('\n'):
+			yield line_buf
+			line_buf = ""
+			break
+
+'''
+
+
+
+'''
+	for line in stdout.read():
+		print(f'{line}')
+#Theoretically, this is a way of obtaining continous output. Needs work to function, however
 	sin,sout,serr = client.exec_command(comm)
 	for l in line_buffered(sout):
 		print(f'{l}')
 
-
-
-def line_buffered(f):
-	line_buf = ""
-	while not f.channel.exit_status_ready():
-		line_buf += f.read(1)
-		if line_buf.endswith('\n'):
-			yield line_buf
-			line_buf = ''
-
-
 '''
-stdin, stdout, stderr = client.exec_command(comm)
-for line in stdout.read():
-	print(f'{line}')
-'''
+
+
