@@ -1,4 +1,6 @@
 import paramiko
+import sys
+import time
 
 '''
 Paramiko allows for communication via SSH connection within Python. This allows for the
@@ -16,18 +18,21 @@ def sshCommand(hostname, port=22, username = 'pi', password = 'karl', comm =''):
 	client.load_system_host_keys()#required to auth via password or private key, check with server host key
 
 	client.connect(hostname, port, username, password)
+	print('connection initialized')
+	stdin, stdout, stderr = client.exec_command(comm, get_pty=True) #does this run in parallel with the following processes??? I thought so, this may be the problem or this needs more time to gather information
+	stdout.flush()
+	print('cmd sent to Pi')
 
-	stdin, stdout, stderr = client.exec_command(comm)
-	print('command executed')
+	while True:
+		print(stdout.readline(100))
+		time.sleep(.05)
 
-	stdout_r = stdout.readlines()
-	for l in stdout_r:
-		print(l)
+	
+	print('code completed or exited')
+
+
 
 '''
-	for l in line_buffered(stdout):
-		print(l)
-
 def line_buffered(f):
 	print("entered buffer sequence")
 	line_buf = ""
@@ -40,8 +45,6 @@ def line_buffered(f):
 			break
 
 '''
-
-
 
 '''
 	for line in stdout.read():
