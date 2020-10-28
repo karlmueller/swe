@@ -21,6 +21,8 @@ import time
 import board
 import busio
 import adafruit_bno055
+from datetime import datetime
+import numpy as np
 
 # Use these lines for I2C
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -30,7 +32,14 @@ sensor = adafruit_bno055.BNO055_I2C(i2c)
 #uart = busio.UART(board.TX, board.RX)
 #sensor = adafruit_bno055.BNO055_UART(uart)
 
+
+def imu_get_data(baud):
+
+data_out = pd.DataFrame([[]], columns=['gyro','euler','linAcc','grav'])
+datapoints = 0
+
 while True:
+    '''
     print("Temperature: {} degrees C".format(sensor.temperature))
     print("Accelerometer (m/s^2): {}".format(sensor.acceleration))
     print("Magnetometer (microteslas): {}".format(sensor.magnetic))
@@ -39,6 +48,9 @@ while True:
     print("Quaternion: {}".format(sensor.quaternion))
     print("Linear acceleration (m/s^2): {}".format(sensor.linear_acceleration))
     print("Gravity (m/s^2): {}".format(sensor.gravity))
-    print()
+    '''
+    now = datetime.now().time()
+    data_out = pd.DataFrame
 
-    time.sleep(1)
+    datapoints += 1
+    time.sleep(1/baud)

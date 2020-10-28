@@ -1,14 +1,18 @@
 import paramiko
 import sys
 import time
+import matplotlib.pyplot as plt
+import numpy as np
+from datetime import datetime as dtime
+import matplotlib.animation as anim
+from matplotlib import style
 
 '''
 Paramiko allows for communication via SSH connection within Python. This allows for the
 calling of required IMU driver functions as well as pulling information from the RasPi device
 via the command line output and put into graphs within linux.
 
-Ensure that username, IP addressm, passowrd, etc are properly input
-
+Ensure that username, IP addressm, passowrd, etc are properly input if errors occur
 '''
 
 def sshCommand(hostname, port=22, username = 'pi', password = 'karl', comm =''):
@@ -21,39 +25,65 @@ def sshCommand(hostname, port=22, username = 'pi', password = 'karl', comm =''):
 	print('connection initialized')
 	stdin, stdout, stderr = client.exec_command(comm, get_pty=True) #does this run in parallel with the following processes??? I thought so, this may be the problem or this needs more time to gather information
 	stdout.flush()
-	print('cmd sent to Pi')
+
+
+	save_data = ['roll','pitch','yaw']
+
+	style.use('fivethirtyeight')
+
+
+	time_begin = time.time()
+	'''
+	fig = plt.figure()
+	ax1 = fig.add_subplot(1,1,1)
+	'''
+
+	fig = plt.gcf()
+	fig.show()
+	fig.canvas.draw()
+
+	plt.axis([time_begin-10, time_begin, -360, 360])
+	plt.ylabel('Euler Angle(s) [Degrees]')
+	plt.xlabel('Time History (s)')
+
+	time_series = []
+	euler_series = []
 
 	while True:
-		print(stdout.readline(100))
+		c_time = time.time()
+		#print(stdout.readline(100))
+		out_data =  stdout.readline(35)
+		parse_dat = out_data.strip('(')
+		#parse_dat = parse_dat.strip(')')
+		parse_dat = parse_dat.replace(' ','')
+		parse_dat = parse_dat.replace(')\r\n','')
+		parse_dat = parse_dat.split(',')
+		form_dat = []
+
+		form_dat.append(float(c_time))
+
+		for ii in range(len(parse_dat)):
+			form_dat.append(round(float(parse_dat[ii]), 6))
+		#print(f'{form_dat}')
+		'''
+		xs.append(form_dat[1:])
+		ys.append(form_dat[1])
+		ax1.plot(xs,ys,['ro','bo','go'])
+		'''
+
+		time_series.append(form_dat[0])
+		euler_series.append(form_dat[1])
+
+		if len(time_series)>100:
+			time_series = time_series[-100:]
+			euler_series = euler_series[-100:]
+
+		print(len(time_series))
+
+		plt.plot(time_series, euler_series,'ro')
+		plt.axis([c_time-10, c_time, -360, 360])
+		#ani = anim.FuncAnimation(fig, interval = 100)
+		fig.canvas.draw()
+		save_data.append(form_dat)
 		time.sleep(.05)
-
-	
-	print('code completed or exited')
-
-
-
-'''
-def line_buffered(f):
-	print("entered buffer sequence")
-	line_buf = ""
-	while True: #not f.channel.exit_status_ready():
-		line_buf += f.read(1)
-		print("completed line")
-		if line_buf.endswith('\n'):
-			yield line_buf
-			line_buf = ""
-			break
-
-'''
-
-'''
-	for line in stdout.read():
-		print(f'{line}')
-#Theoretically, this is a way of obtaining continous output. Needs work to function, however
-	sin,sout,serr = client.exec_command(comm)
-	for l in line_buffered(sout):
-		print(f'{l}')
-
-'''
-
 
