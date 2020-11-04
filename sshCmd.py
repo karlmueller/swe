@@ -3,9 +3,6 @@ import sys
 import time
 import matplotlib.pyplot as plt
 import numpy as np
-from datetime import datetime as dtime
-import matplotlib.animation as anim
-from matplotlib import style
 
 '''
 Paramiko allows for communication via SSH connection within Python. This allows for the
@@ -25,12 +22,7 @@ def sshCommand(hostname, port=22, username = 'pi', password = 'karl', comm =''):
 	print('connection initialized')
 	stdin, stdout, stderr = client.exec_command(comm, get_pty=True) #does this run in parallel with the following processes??? I thought so, this may be the problem or this needs more time to gather information
 	stdout.flush()
-
-
 	save_data = ['roll','pitch','yaw']
-
-	style.use('fivethirtyeight')
-
 
 	time_begin = time.time()
 	'''
@@ -38,13 +30,13 @@ def sshCommand(hostname, port=22, username = 'pi', password = 'karl', comm =''):
 	ax1 = fig.add_subplot(1,1,1)
 	'''
 
-	fig = plt.gcf()
-	fig.show()
-	fig.canvas.draw()
+	#fig = plt.gcf()
+	#fig.show()
+	#fig.canvas.draw()
 
-	plt.axis([time_begin-10, time_begin, -360, 360])
-	plt.ylabel('Euler Angle(s) [Degrees]')
-	plt.xlabel('Time History (s)')
+	#plt.axis([time_begin-10, time_begin, -360, 360])
+	#plt.ylabel('Euler Angle(s) [Degrees]')
+	#plt.xlabel('Time History (s)')
 
 	time_series = []
 	euler_series = []
@@ -64,26 +56,28 @@ def sshCommand(hostname, port=22, username = 'pi', password = 'karl', comm =''):
 
 		for ii in range(len(parse_dat)):
 			form_dat.append(round(float(parse_dat[ii]), 6))
-		#print(f'{form_dat}')
+		print(f'{form_dat}')
 		'''
 		xs.append(form_dat[1:])
 		ys.append(form_dat[1])
 		ax1.plot(xs,ys,['ro','bo','go'])
 		'''
-
+		'''
 		time_series.append(form_dat[0])
 		euler_series.append(form_dat[1])
+		
+		if len(time_series)>30:
+			time_series = time_series[-30:]
+			euler_series = euler_series[-30:]
+		'''
+		#print(len(time_series))
 
-		if len(time_series)>100:
-			time_series = time_series[-100:]
-			euler_series = euler_series[-100:]
-
-		print(len(time_series))
-
-		plt.plot(time_series, euler_series,'ro')
-		plt.axis([c_time-10, c_time, -360, 360])
+		#plt.plot(time_series, euler_series,'ro')
+		#plt.axis([c_time-1.5, c_time, -360, 360])
 		#ani = anim.FuncAnimation(fig, interval = 100)
-		fig.canvas.draw()
-		save_data.append(form_dat)
+		#fig.canvas.draw()
+		#save_data.append(form_dat)
+		stdout.flush()
 		time.sleep(.05)
+		
 
