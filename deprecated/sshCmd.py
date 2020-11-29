@@ -25,28 +25,21 @@ def sshCommand(hostname, port=22, username = 'pi', password = 'karl', comm =''):
 	save_data = ['roll','pitch','yaw']
 
 	time_begin = time.time()
-	'''
-	fig = plt.figure()
-	ax1 = fig.add_subplot(1,1,1)
-	'''
 
-	#fig = plt.gcf()
-	#fig.show()
-	#fig.canvas.draw()
-
-	#plt.axis([time_begin-10, time_begin, -360, 360])
-	#plt.ylabel('Euler Angle(s) [Degrees]')
-	#plt.xlabel('Time History (s)')
+	baud_rate = 5;
 
 	time_series = []
 	euler_series = []
 
+
+# reading and theoretically plotting perpetual while loop
 	while True:
+		stdout.flush()
 		c_time = time.time()
-		#print(stdout.readline(100))
-		out_data =  stdout.readline(35)
+
+		out_data =  stdout.readline(45)
 		parse_dat = out_data.strip('(')
-		#parse_dat = parse_dat.strip(')')
+
 		parse_dat = parse_dat.replace(' ','')
 		parse_dat = parse_dat.replace(')\r\n','')
 		parse_dat = parse_dat.split(',')
@@ -56,28 +49,6 @@ def sshCommand(hostname, port=22, username = 'pi', password = 'karl', comm =''):
 
 		for ii in range(len(parse_dat)):
 			form_dat.append(round(float(parse_dat[ii]), 6))
-		print(f'{form_dat}')
-		'''
-		xs.append(form_dat[1:])
-		ys.append(form_dat[1])
-		ax1.plot(xs,ys,['ro','bo','go'])
-		'''
-		'''
-		time_series.append(form_dat[0])
-		euler_series.append(form_dat[1])
-		
-		if len(time_series)>30:
-			time_series = time_series[-30:]
-			euler_series = euler_series[-30:]
-		'''
-		#print(len(time_series))
+		#print(f'{form_dat}')
 
-		#plt.plot(time_series, euler_series,'ro')
-		#plt.axis([c_time-1.5, c_time, -360, 360])
-		#ani = anim.FuncAnimation(fig, interval = 100)
-		#fig.canvas.draw()
-		#save_data.append(form_dat)
-		stdout.flush()
-		time.sleep(.05)
-		
-
+		time.sleep(1/baud_rate)

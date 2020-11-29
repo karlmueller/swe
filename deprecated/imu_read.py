@@ -5,7 +5,7 @@ import time
 from sshCmd import sshCommand
 
 
-user = 'pi'      
+user = 'pi'
 pswd = 'karl' 
 port = 22
 addr = '192.168.0.161' 

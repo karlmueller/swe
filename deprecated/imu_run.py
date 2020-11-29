@@ -15,23 +15,15 @@ Note that if made into a function, will need to change how the other code calls 
 easier if running the entirety of the code from the pi though
 
 '''
-
-
 import time
 import board
 import busio
 import adafruit_bno055
-from datetime import datetime
 import numpy as np
 
 # Use these lines for I2C
 i2c = busio.I2C(board.SCL, board.SDA)
 sensor = adafruit_bno055.BNO055_I2C(i2c)
-
-# User these lines for UART
-#uart = busio.UART(board.TX, board.RX)
-#sensor = adafruit_bno055.BNO055_UART(uart)
-
 
 def imu_get_data(baud):
 

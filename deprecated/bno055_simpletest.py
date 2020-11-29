@@ -2,7 +2,6 @@ import time
 import board
 import busio
 import adafruit_bno055
-from datetime import datetime
 import numpy as np
 #import pandas as pd
 
