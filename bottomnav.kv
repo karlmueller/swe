@@ -1,0 +1,59 @@
+BoxLayout:
+
+    orientation:'vertical'
+
+    MDToolbar:
+        title: 'Swe Technologies: Fall Detection'
+        md_bg_color: .2, .2, .2, 1
+        specific_text_color: 1, 1, 1, 1
+
+    MDBottomNavigation:
+        panel_color: .2, .2, .2, .8
+
+        MDBottomNavigationItem:
+            name: 'screen 1'
+            text: 'Connection'
+            icon: 'access-point'
+
+            MDTextField:
+                id: ipAddr
+                hint_text: 'Enter IP Address'
+                helper_text: 'IP address of Swe product'
+                helper_text_mode: 'on_focus'
+                icon_right: 'cellphone-wireless'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+                size_hint_x: None
+                width: 300
+
+            MDTextField:
+                id: portAddr
+                hint_text: 'Enter Port'
+                helper_text: 'Port number of Swe product'
+                helper_text_mode: 'on_focus'
+                icon_right: 'power-plug'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.45}
+                size_hint_x: None
+                width: 300
+
+            MDRectangleFlatButton:
+                id: connectButton
+                text: 'Connect to Swe'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.1}
+
+        MDBottomNavigationItem:
+            name: 'screen 2'
+            text: 'Sway Plotter'
+            icon: 'axis-arrow'
+
+            MDLabel:
+                text: 'Sway plotter and data output'
+                halign: 'center'
+
+        MDBottomNavigationItem:
+            name: 'screen 3'
+            text: 'Options'
+            icon: 'cogs'
+
+            MDLabel:
+                text: 'Options such as emergency contact and settings'
+                halign: 'center'

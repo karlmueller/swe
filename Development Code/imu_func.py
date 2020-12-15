@@ -1,9 +1,14 @@
-#This is a frozen code version, do not edit -- KWM 2020/11/28
+#This is development code -- KWM 2020/11/28
 import socket
 import time
 import busio
 import board
 import adafruit_bno055
+
+
+
+
+
 
 # Define connection parameters b/w the RasPi and the bno055 IMU sensor
 i2c = busio.I2C(board.SCL, board.SDA)
