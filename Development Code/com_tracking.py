@@ -8,12 +8,12 @@ from matplotlib.animation import FuncAnimation
 import numpy as np
 from client_fx import client_fx
 
-imu_instance = client_fx('192.168.0.161', 35196)
+imu_instance = client_fx(2, '192.168.0.161', 35196)
 q_pre = imu_instance.dq.get()
 q_0 = q_pre[1:5]
 h = .8636  # height of the waist from the ground surface expressed in meters
 # the height vector where the height measurement makes up the z component
-h_vec = [0, 0, h]
+h_vec = [h, 0, 0]
 # where q is whatever variable the continuously updating quaternion vector is stored as
 r_0 = R.from_quat(q_0)
 s_0 = r_0.apply(h_vec)
@@ -46,8 +46,8 @@ def animate(i):
 
     tt=time.time()
     tc.append(tt)
-    x.append(float(s[0] - x_0))
-    y.append(float(s[1] - y_0))
+    x.append(float((s[0] - x_0)))
+    y.append(float(-1*(s[1] - y_0)))
 
     if len(x) > 50:
         x = x[-50:]
@@ -58,8 +58,11 @@ def animate(i):
     ax1.plot(x, y, c='red', marker="o")
     ax1.set_xlabel('X position (m)')
     ax1.set_ylabel('Y position (m)')
-    ax1.set_xlim([-1, 1])
-    ax1.set_ylim([-1, 1])
+
+    square_lim = 0.25
+
+    ax1.set_xlim([-square_lim, square_lim])
+    ax1.set_ylim([-square_lim, square_lim])
     ax1.set_autoscale_on(False)
 
 

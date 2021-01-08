@@ -18,7 +18,7 @@ import threading
 import queue
 
 class client_fx(object):
-    def __init__(self, server_ip, port, **kwargs):
+    def __init__(self, data_type, server_ip, port, **kwargs):
 
         self.header_len = 4
         self.refresh_rate = 50  # not yet handled for
@@ -37,7 +37,7 @@ class client_fx(object):
                 'Connection not established. Check power, port number, and IP ADDR and try again')
 
         #send server proper type of data requested 1)euler, 2)quat, 3)acc, 4)lin_acc, 5)grav
-        self.data_type = 1
+        self.data_type = data_type
         self.s.send(bytes(str(self.data_type), 'utf-8'))  # send data to server
 
         self.dq = queue.LifoQueue(1)
@@ -67,4 +67,5 @@ class client_fx(object):
 
     def ticker(self):
         while True:
-           print(self.dq.get())
+           #print(self.dq.get())
+           self.dq.get()

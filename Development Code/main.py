@@ -257,7 +257,7 @@ class sweApp(MDApp):
         port_input = int(self.root.ids.portAddr.text)
 
         try:
-            self.imu_instance = client_fx(ip_input, port_input)
+            self.imu_instance = client_fx(1, ip_input, port_input)
             Snackbar(text=f'Attempting connection with {ip_input} : {port_input}').show()
         except: 
             Snackbar(text=f'Cannot connect with {ip_input} : {port_input}... try again later').show()
